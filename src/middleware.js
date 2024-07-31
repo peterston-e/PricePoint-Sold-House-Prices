@@ -1,21 +1,9 @@
-import { NextResponse } from "next/server";
+// Without a defined matcher, this one line applies next-auth to the entire project.
+export { default } from "next-auth/middleware";
 
-export function middleware(request) {
-	const apiKey = request.headers.get("x-api-key");
-	const expectedApiKey = process.env.API_KEY;
+// Applies next-auth only to matching routes. Can also be
+// a regex or an array of strings or regexes.
+// Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 
-	if (request.nextUrl.pathname.startsWith("/api")) {
-		if (apiKey !== expectedApiKey) {
-			return new NextResponse(
-				JSON.stringify({ success: false, message: "Invalid API key" }),
-				{ status: 401, headers: { "content-type": "application/json" } }
-			);
-		}
-	}
-
-	return NextResponse.next();
-}
-
-export const config = {
-	matcher: "/api/",
-};
+// ****** Uncomment line below to setup up auth on specific pages ******
+// export const config = { matcher: ["/runapp", "/subscribers"] };

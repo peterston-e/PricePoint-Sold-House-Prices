@@ -14,3 +14,7 @@ Ever been in an area and wondered what the houses sell for? I have. PricePoint g
   - `middleware.js`: Next.js middleware for request/response modifications
 - `public/`: Static assets
 - `config/`: Configuration files
+
+## Auth Tutorial For Next-Auth
+
+https://www.youtube.com/watch?v=w2h54xz6Ndw
