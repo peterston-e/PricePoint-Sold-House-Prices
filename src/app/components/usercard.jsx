@@ -27,11 +27,11 @@ export default function UserCard({ user, pagetype }) {
 					value="90266bf5a8b757e0683882421ecb73729041269c0112ad591049dbb704cc85ae"
 				/>
 				<button id="submitButton" type="submit">
-					Sign out
+					Sign Out
 				</button>
 			</form>
 			<a href="/api/auth/signout">
-				<button>Sign Out</button>
+				<button>Sign Out Page</button>
 			</a>
 		</div>
 	);
