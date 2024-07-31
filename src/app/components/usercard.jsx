@@ -30,6 +30,9 @@ export default function UserCard({ user, pagetype }) {
 					Sign out
 				</button>
 			</form>
+			<a href="/api/auth/signout">
+				<button>Sign Out</button>
+			</a>
 		</div>
 	);
 }

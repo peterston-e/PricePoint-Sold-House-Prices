@@ -17,4 +17,8 @@ Ever been in an area and wondered what the houses sell for? I have. PricePoint g
 
 ## Auth Tutorial For Next-Auth
 
+My Text version
+https://savory-birth-858.notion.site/NextAuth-js-6b83b15601c24bdca1051d37794d460c
+
+Dave Gray: YouTube
 https://www.youtube.com/watch?v=w2h54xz6Ndw
