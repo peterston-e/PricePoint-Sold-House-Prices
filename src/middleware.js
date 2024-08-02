@@ -6,4 +6,4 @@ export { default } from "next-auth/middleware";
 // Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 
 // ****** Uncomment line below to setup up auth on specific pages ******
-// export const config = { matcher: ["/doesntexist", "/subscribers"] };
+export const config = { matcher: ["/doesntexist", "/subscribers"] };
