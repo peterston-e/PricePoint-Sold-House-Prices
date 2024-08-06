@@ -25,3 +25,12 @@ export const houseImage = {
 export const getHouseImage = (type) => {
 	return houseImage[type.toLowerCase()];
 };
+
+export const formatPrice = (price) => {
+	return new Intl.NumberFormat("en-GB", {
+		style: "currency",
+		currency: "GBP",
+		maximumFractionDigits: 0,
+		minimumFractionDigits: 0,
+	}).format(price);
+};

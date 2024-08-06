@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { CalenderIcon, DocumentIcon } from "./icons";
-import { getIcon } from "../helpers/houseHelper";
-import { getHouseImage } from "../helpers/houseHelper";
+import { getIcon, getHouseImage, formatPrice } from "../helpers/houseHelper";
 
 const house = {
 	image: "/assets/images/detached.jpeg",
@@ -21,7 +20,9 @@ export default function HouseCard({ record }) {
 				/>
 			</div>
 			<div className="grow relative">
-				<div className="font-black text-xl mt-3">{record.price}</div>
+				<div className="font-black text-xl mt-3">
+					{formatPrice(record.price)}
+				</div>
 				<div className="mb-3 text-slate-600">{record.address}</div>
 				<div className="flex items-center justify-between my-1 text-slate-400">
 					<span className="text-[10px] flex items-center">
