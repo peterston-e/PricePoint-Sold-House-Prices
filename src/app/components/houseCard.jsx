@@ -1,21 +1,66 @@
 import Image from "next/image";
+import {
+	Apartment,
+	HouseIcon,
+	CalenderIcon,
+	DocumentIcon,
+	OtherIcon,
+} from "./icons";
+import { getIcon } from "../helpers/houseHelper";
 
-export default function HouseCard() {
+const house = {
+	image: "/assets/images/detached.jpeg",
+};
+
+// const houseType = {
+// 	apartment: Apartment,
+// 	detached: HouseIcon,
+// 	semi: HouseIcon,
+// 	terraced: HouseIcon,
+// 	other: OtherIcon,
+// };
+
+// const getIcon = (type) => {
+// 	const Icon = houseType[type.toLowerCase()];
+// 	return <Icon className="w-4 h-4 mr-1" />;
+// };
+
+export default function HouseCard({ record }) {
 	return (
-		<div className="flex items-center justify-between gap-2 p-2 ">
-			<div className="rounded-full min-h-10 min-w-10">
-				{user?.image && (
+		<div className="mt-3 mx-2 flex items-center justify-between gap-2 px-2 py-4 border-0 rounded-xl drop-shadow-xl bg-white">
+			<div className="rounded-full min-h-10 min-w-10 mr-3">
+				{house?.image && (
 					<Image
 						className="rounded-full"
-						src=""
-						alt=""
-						width={50}
-						height={50}
+						src={house.image}
+						alt="house"
+						width={60}
+						height={60}
 						priority={true}
 					/>
 				)}
 			</div>
-			<div className="grow"></div>
+			<div className="grow relative">
+				<div className="font-black text-xl mt-3">{record.price}</div>
+				<div className="mb-3 text-slate-600">{record.address}</div>
+				<div className="flex items-center justify-between my-1 text-slate-400">
+					<span className="text-[10px] flex items-center">
+						<CalenderIcon className="w-[14px] h-[14px] mr-1" />
+						{record.date}
+					</span>
+					<span className="text-[10px] flex items-center">
+						{getIcon(record.type)}
+						{record.type}
+					</span>
+					<span className="text-[10px] flex items-center">
+						<DocumentIcon className="w-4 h-4 mr-1" />
+						{record.tenure}
+					</span>
+				</div>
+				<div className="absolute top-0 right-0 text-sky-600 text-xs">
+					{record.distance}
+				</div>
+			</div>
 		</div>
 	);
 }
