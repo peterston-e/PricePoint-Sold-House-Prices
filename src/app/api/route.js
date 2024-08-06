@@ -19,8 +19,13 @@ export async function POST(request) {
 			return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
 		}
 
-		const { postcode } = await request.json();
-		const result = await searchPostcode(postcode);
+		const { postcodes } = await request.json();
+
+		const result = await Promise.all(
+			postcodes.map(async (postcode) => {
+				return await searchPostcode(postcode);
+			})
+		);
 
 		return NextResponse.json(result);
 	} catch (error) {

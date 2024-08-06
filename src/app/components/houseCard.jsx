@@ -23,7 +23,7 @@ export default function HouseCard({ record }) {
 				<div className="font-black text-xl mt-3">
 					{formatPrice(record.price)}
 				</div>
-				<div className="mb-3 text-slate-600">{record.address}</div>
+				<div className="mb-3 text-slate-600 text-sm">{record.address}</div>
 				<div className="flex items-center justify-between my-1 text-slate-400">
 					<span className="text-[10px] flex items-center">
 						<CalenderIcon className="w-[14px] h-[14px] mr-1" />
