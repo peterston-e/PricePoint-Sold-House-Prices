@@ -1,44 +1,24 @@
 import Image from "next/image";
-import {
-	Apartment,
-	HouseIcon,
-	CalenderIcon,
-	DocumentIcon,
-	OtherIcon,
-} from "./icons";
+import { CalenderIcon, DocumentIcon } from "./icons";
 import { getIcon } from "../helpers/houseHelper";
+import { getHouseImage } from "../helpers/houseHelper";
 
 const house = {
 	image: "/assets/images/detached.jpeg",
 };
 
-// const houseType = {
-// 	apartment: Apartment,
-// 	detached: HouseIcon,
-// 	semi: HouseIcon,
-// 	terraced: HouseIcon,
-// 	other: OtherIcon,
-// };
-
-// const getIcon = (type) => {
-// 	const Icon = houseType[type.toLowerCase()];
-// 	return <Icon className="w-4 h-4 mr-1" />;
-// };
-
 export default function HouseCard({ record }) {
 	return (
 		<div className="mt-3 mx-2 flex items-center justify-between gap-2 px-2 py-4 border-0 rounded-xl drop-shadow-xl bg-white">
 			<div className="rounded-full min-h-10 min-w-10 mr-3">
-				{house?.image && (
-					<Image
-						className="rounded-full"
-						src={house.image}
-						alt="house"
-						width={60}
-						height={60}
-						priority={true}
-					/>
-				)}
+				<Image
+					className="rounded-full"
+					src={getHouseImage(record.type)}
+					alt="house"
+					width={60}
+					height={60}
+					priority={true}
+				/>
 			</div>
 			<div className="grow relative">
 				<div className="font-black text-xl mt-3">{record.price}</div>

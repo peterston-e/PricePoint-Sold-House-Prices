@@ -12,7 +12,7 @@ export default async function Home() {
 		price: 750000,
 		address: "6 Bronsart Road, SW6 6AA",
 		date: "22/06/23",
-		type: "Other",
+		type: "Terraced",
 		tenure: "Freehold",
 		distance: "150m",
 	};
