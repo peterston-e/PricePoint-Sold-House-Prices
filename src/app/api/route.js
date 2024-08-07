@@ -1,22 +1,45 @@
 import { NextResponse } from "next/server";
 import searchPostcode from "./mongodb";
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
+import { RateLimiterMemory } from "rate-limiter-flexible";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./auth/[...nextauth]/options";
 
-// temp hard coded postcode
-// const postcode = "BN1 8AB";
+const opts = {
+	points: 12, // Number of points
+	duration: 60, // Per 60 seconds
+};
+
+const rateLimiter = new RateLimiterMemory(opts);
 
 export async function GET() {
+	try {
+		const session = await getServerSession(authOptions);
+
+		await rateLimiter.consume(session.user.email, 1);
+	} catch (rateLimiterRes) {
+		return NextResponse.json({
+			success: false,
+			data: [],
+			message: "Rate limit exceeded",
+		});
+	}
 	return NextResponse.json({ message: "hello from the api." });
 }
 
 export async function POST(request) {
 	try {
-		// Check for API key
-		const headersList = headers();
-		const apiKey = headersList.get("x-api-key");
+		// sets the rate limit for the user
+		try {
+			const session = await getServerSession(authOptions);
 
-		if (apiKey !== process.env.API_KEY) {
-			return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+			await rateLimiter.consume(session.user.email, 1);
+		} catch (rateLimiterRes) {
+			return NextResponse.json({
+				success: false,
+				data: [],
+				message: "Rate limit exceeded",
+			});
 		}
 
 		const { postcodes } = await request.json();

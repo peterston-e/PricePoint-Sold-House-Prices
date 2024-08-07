@@ -15,6 +15,7 @@
     "mongodb": "^6.8.0",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
+    "rate-limiter-flexible": "^5.0.3",
     "react": "^18",
     "react-dom": "^18"
   },

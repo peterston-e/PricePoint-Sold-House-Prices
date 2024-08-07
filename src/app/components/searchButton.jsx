@@ -41,7 +41,6 @@ export default function SearchButton() {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				"x-api-key": process.env.NEXT_PUBLIC_API_KEY,
 			},
 			body: JSON.stringify({ postcodes }),
 		});
@@ -103,8 +102,8 @@ export default function SearchButton() {
 					</div>
 
 					{nearestPostcodes.length > 0 &&
-						nearestPostcodes.map((pc) => (
-							<div className="text-center text-sm text-gray-400">
+						nearestPostcodes.map((pc, index) => (
+							<div key={index} className="text-center text-sm text-gray-400">
 								{pc.postcode}
 							</div>
 						))}
