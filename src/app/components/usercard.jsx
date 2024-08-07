@@ -1,38 +1,28 @@
 import Image from "next/image";
+import SignOut from "./signout";
 
-export default function UserCard({ user, pagetype }) {
-	const emailDisplay = user?.email ? <div>{user?.email}</div> : null;
-	const userImage = user?.image ? (
-		<Image
-			className="rounded-full"
-			src={user?.image}
-			alt={user?.name ?? "Profile Picture"}
-			width={75}
-			height={75}
-			priority={true}
-		/>
-	) : null;
-
+export default function UserCard({ user }) {
 	return (
-		<div>
-			<section>
-				{emailDisplay}
-				{userImage}
-				<p>{pagetype} Page</p>
-			</section>
-			<form action="http://localhost:3000/api/auth/signout" method="POST">
-				<input
-					type="hidden"
-					name="csrfToken"
-					value="90266bf5a8b757e0683882421ecb73729041269c0112ad591049dbb704cc85ae"
-				/>
-				<button id="submitButton" type="submit">
-					Sign Out
-				</button>
-			</form>
-			<a href="/api/auth/signout">
-				<button>Sign Out Page</button>
-			</a>
+		<div className="flex items-center justify-between gap-2 p-2 ">
+			<div className="rounded-full min-h-10 min-w-10">
+				{user?.image && (
+					<Image
+						className="rounded-full"
+						src={user.image}
+						alt={user?.name ?? "Profile Picture"}
+						width={50}
+						height={50}
+						priority={true}
+					/>
+				)}
+			</div>
+			<div className="grow">
+				{user?.name && <p className="text-[16px] font-bold">{user.name}</p>}
+				{user?.email && (
+					<p className="text-[12px] text-neutral-500">{user.email}</p>
+				)}
+			</div>
+			<SignOut />
 		</div>
 	);
 }
