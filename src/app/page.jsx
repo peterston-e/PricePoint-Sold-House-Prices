@@ -2,7 +2,7 @@ import { options } from "./api/auth/[...nextauth]/options";
 import UserCard from "./components/userCard";
 import { getServerSession } from "next-auth/next";
 import Hero from "./components/hero";
-import SearchButton from "./components/searchButton";
+import SearchButton from "./components/searchButton.unused";
 import HouseCard from "./components/houseCard";
 import SearchSection from "./components/searchSection";
 

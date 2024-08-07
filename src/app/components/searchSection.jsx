@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import useGeoSearch from "../hooks/useGeoSearch";
-import SearchButton from "./SearchButton";
+import SearchButton from "./searchButton.unused";
 import Search from "./search";
 import HouseCard from "./HouseCard";
 
