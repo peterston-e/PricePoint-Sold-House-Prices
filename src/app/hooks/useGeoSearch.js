@@ -33,24 +33,67 @@ export default function useGeoSearch() {
 	};
 
 	const getNearestPostcode = async (position) => {
-		console.log("Getting nearest postcode for:", position);
 		// Placeholder implementation - replace with actual API call
+		const { latitude: lat, longitude: long } = position;
+		const apiEndpoint = `https://findthatpostcode.uk/points/${lat},${long}.json`;
+		const reverseResponse = await fetch(apiEndpoint);
+		const locationData = await reverseResponse.json();
 
-		return nearestPostcode;
+		const newNearestPostcode =
+			locationData.data.relationships.nearest_postcode.data.id;
+		// Log the nearest postcode here, before setting state
+		console.log("Nearest postcode:", newNearestPostcode);
+
+		setNearestPostcode(newNearestPostcode);
+
+		return newNearestPostcode;
 	};
 
 	const getSurroundingPostcodes = async (position) => {
-		console.log("Getting surrounding postcodes for:", position);
-		// Placeholder implementation - replace with actual API call
+		const { latitude: lat, longitude: long } = position;
+		const postcodeArrayEndpoint = `https://api.postcodes.io/postcodes?lon=${long}&lat=${lat}&radius=200`;
+		const getArray = await fetch(postcodeArrayEndpoint);
+		const pcArray = await getArray.json();
+		const newSurroundingPostcodes = pcArray.result.map((pc) => pc.postcode);
+		setSurroundingPostcodes(newSurroundingPostcodes);
+		console.log("Surrounding postcodes:", newSurroundingPostcodes); // Log the surrounding postcodes.
 
-		return surroundingPostcodes;
+		return newSurroundingPostcodes;
 	};
 
-	const getHouseData = async (postcodes) => {
-		console.log("Getting house data for postcodes:", postcodes);
-		// Placeholder implementation - replace with actual API call
+	const transformHouseData = (rawData) => {
+		return rawData.flatMap((postcodeData) =>
+			postcodeData.data.map((house) => ({
+				price: house.price,
+				address: `${house.paon} ${house.street}, ${house.postcode}`,
+				date: house.date, // TODO format this
+				type: house.property_type,
+				tenure: house.duration,
+				distance: "150m", // TODO calculate this dynamically
+			}))
+		);
+	};
 
-		return houseData;
+	const getHouseData = async (surroundingPostcodes) => {
+		const apiEndpoint = "http://localhost:3000/api";
+		const response = await fetch(apiEndpoint, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ postcodes: surroundingPostcodes }),
+		});
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		const rawHouseData = await response.json();
+		const newHouseData = transformHouseData(rawHouseData);
+
+		console.log("House data:", newHouseData); // Log the house data.
+		setHouseData(newHouseData);
+
+		return newHouseData;
 	};
 
 	const getLocation = async () => {
@@ -62,9 +105,14 @@ export default function useGeoSearch() {
 			console.log("Position in getLocation:", position); // Log the position here too
 
 			// Implement these functions when declared properly
-			// const nearestPostcode = await getNearestPostcodes(position);
-			// const surroundingPostcodes = await getSurroundingPostcodes(position);
-			// const houseData = await getHouseData(surroundingPostcodes);
+			const newNearestPostcode = await getNearestPostcode(position);
+			console.log("Postcode in getLocation:", newNearestPostcode); // Log the postcode.
+
+			const newSurroundingPostcodes = await getSurroundingPostcodes(position);
+			console.log("Postcode radius in getLocation:", newSurroundingPostcodes); // Log the postcode in 200m radius.
+
+			const newHouseData = await getHouseData(newSurroundingPostcodes);
+			console.log("House data in getLocation:", newHouseData); // Log the house data.
 
 			setIsLoading(false);
 			// return houseData;  // Uncomment when implemented
@@ -76,5 +124,11 @@ export default function useGeoSearch() {
 
 	// Other functions remain the same...
 
-	return { getLocation, position, isLoading, error }; // Now including position in the return
+	return {
+		getLocation,
+		nearestPostcode,
+		surroundingPostcodes,
+		isLoading,
+		error,
+	}; // Now including position in the return
 }

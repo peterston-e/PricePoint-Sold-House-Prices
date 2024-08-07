@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]/options";
 
 const opts = {
-	points: 12, // Number of points
+	points: 120, // Number of points TODO: change this to 12
 	duration: 60, // Per 60 seconds
 };
 
