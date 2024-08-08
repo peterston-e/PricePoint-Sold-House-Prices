@@ -75,7 +75,7 @@ export default function useGeoSearch() {
 	};
 
 	const getHouseData = async (surroundingPostcodes) => {
-		const apiEndpoint = "http://localhost:3000/api";
+		const apiEndpoint = "/api";
 		const response = await fetch(apiEndpoint, {
 			method: "POST",
 			headers: {
