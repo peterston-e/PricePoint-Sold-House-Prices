@@ -130,5 +130,6 @@ export default function useGeoSearch() {
 		surroundingPostcodes,
 		isLoading,
 		error,
+		houseData,
 	}; // Now including position in the return
 }
