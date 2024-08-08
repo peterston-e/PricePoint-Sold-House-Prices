@@ -20,7 +20,7 @@ export default function useGeoSearch() {
 						longitude: p.coords.longitude.toFixed(6),
 					};
 					setPosition(newPosition);
-					console.log("New position:", newPosition); // Log the position here
+					// console.log("New position:", newPosition); // Log the position here
 					resolve(newPosition);
 				},
 				(error) => {
@@ -38,12 +38,11 @@ export default function useGeoSearch() {
 		const apiEndpoint = `https://findthatpostcode.uk/points/${lat},${long}.json`;
 		const reverseResponse = await fetch(apiEndpoint);
 		const locationData = await reverseResponse.json();
-		// console.log("Location data:", locationData); // Log the location data here
 
 		const newNearestPostcode =
 			locationData.data.relationships.nearest_postcode.data.id;
-		// Log the nearest postcode here, before setting state
-		console.log("Nearest postcode:", newNearestPostcode);
+
+		// console.log("Nearest postcode:", newNearestPostcode); // Log the nearest postcode here, before setting state
 
 		setNearestPostcode(newNearestPostcode);
 
@@ -57,7 +56,7 @@ export default function useGeoSearch() {
 		const pcArray = await getArray.json();
 		const newSurroundingPostcodes = pcArray.result.map((pc) => pc.postcode);
 		setSurroundingPostcodes(newSurroundingPostcodes);
-		console.log("Surrounding postcodes:", newSurroundingPostcodes); // Log the surrounding postcodes.
+		// console.log("Surrounding postcodes:", newSurroundingPostcodes); // Log the surrounding postcodes.
 
 		return newSurroundingPostcodes;
 	};
@@ -91,7 +90,7 @@ export default function useGeoSearch() {
 		const rawHouseData = await response.json();
 		const newHouseData = transformHouseData(rawHouseData);
 
-		console.log("House data:", newHouseData); // Log the house data.
+		// console.log("House data:", newHouseData); // Log the house data.
 		setHouseData(newHouseData);
 
 		return newHouseData;
@@ -103,27 +102,24 @@ export default function useGeoSearch() {
 
 		try {
 			const position = await getCurrentPosition();
-			console.log("Position in getLocation:", position); // Log the position here too
+			// console.log("Position in getLocation:", position); // Log the position here too
 
 			// Implement these functions when declared properly
 			const newNearestPostcode = await getNearestPostcode(position);
-			console.log("Postcode in getLocation:", newNearestPostcode); // Log the postcode.
+			// console.log("Postcode in getLocation:", newNearestPostcode); // Log the postcode.
 
 			const newSurroundingPostcodes = await getSurroundingPostcodes(position);
-			console.log("Postcode radius in getLocation:", newSurroundingPostcodes); // Log the postcode in 200m radius.
+			// console.log("Postcode radius in getLocation:", newSurroundingPostcodes); // Log the postcode in 200m radius.
 
 			const newHouseData = await getHouseData(newSurroundingPostcodes);
-			console.log("House data in getLocation:", newHouseData); // Log the house data.
+			// console.log("House data in getLocation:", newHouseData); // Log the house data.
 
 			setIsLoading(false);
-			// return houseData;  // Uncomment when implemented
 		} catch (error) {
 			setError(error);
 			setIsLoading(false);
 		}
 	};
-
-	// Other functions remain the same...
 
 	return {
 		getLocation,
@@ -132,5 +128,5 @@ export default function useGeoSearch() {
 		isLoading,
 		error,
 		houseData,
-	}; // Now including position in the return
+	};
 }
