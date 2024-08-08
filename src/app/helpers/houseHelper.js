@@ -1,17 +1,12 @@
-import { Apartment, HouseIcon, OtherIcon } from "../components/icons";
+import { Apartment, HouseIcon } from "../components/icons";
 import Image from "next/image";
 
 export const houseType = {
-	apartment: Apartment,
-	detached: HouseIcon,
-	semi: HouseIcon,
-	terraced: HouseIcon,
-	other: HouseIcon,
-	f: Apartment, // Assuming 'F' stands for Flat
-	s: HouseIcon, // Assuming 'S' stands for Semi-detached
-	t: HouseIcon, // Assuming 'T' stands for Terraced
-	d: HouseIcon, // Assuming 'D' stands for Detached
-	o: OtherIcon, // For 'Other' type
+	f: Apartment,
+	s: HouseIcon,
+	t: HouseIcon,
+	d: HouseIcon,
+	o: HouseIcon,
 };
 
 export const getIcon = (type) => {
@@ -24,10 +19,6 @@ export const getIcon = (type) => {
 };
 
 export const houseImage = {
-	apartment: "/assets/images/apartment.jpeg",
-	detached: "/assets/images/detached.jpeg",
-	semi: "/assets/images/semi.png",
-	terraced: "/assets/images/terrace.jpeg",
 	f: "/assets/images/apartment.jpeg",
 	s: "/assets/images/semi.png",
 	t: "/assets/images/terrace.jpeg",
@@ -69,4 +60,23 @@ export const expandTenure = (tenure) => {
 		l: "Leasehold",
 	};
 	return tenureMap[tenure.toLowerCase()] || tenure;
+};
+
+export const formatAddress = (address) => {
+	if (!address) return "Address not available";
+
+	// Split the address into parts
+	const parts = address.split(",");
+
+	// Format the street part (first part)
+	const streetPart = parts[0]
+		.trim()
+		.toLowerCase()
+		.replace(/\b\w/g, (c) => c.toUpperCase());
+
+	// If there's a postcode part, keep it uppercase
+	const postcodePart = parts.length > 1 ? parts[1].trim().toUpperCase() : "";
+
+	// Join the formatted parts
+	return `${streetPart}, ${postcodePart}`.trim();
 };

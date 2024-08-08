@@ -6,6 +6,7 @@ import {
 	formatPrice,
 	expandType,
 	expandTenure,
+	formatAddress,
 } from "../helpers/houseHelper";
 
 export default function HouseCard({ record }) {
@@ -31,7 +32,7 @@ export default function HouseCard({ record }) {
 					{record.price ? formatPrice(record.price) : "Price not available"}
 				</div>
 				<div className="mb-3 text-slate-600 text-sm">
-					{record.address || "Address not available"}
+					{formatAddress(record.address) || "Address not available"}
 				</div>
 				<div className="flex items-center justify-between my-1 text-slate-400">
 					<span className="text-[10px] flex items-center">
