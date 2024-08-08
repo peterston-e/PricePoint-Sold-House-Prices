@@ -38,6 +38,7 @@ export default function useGeoSearch() {
 		const apiEndpoint = `https://findthatpostcode.uk/points/${lat},${long}.json`;
 		const reverseResponse = await fetch(apiEndpoint);
 		const locationData = await reverseResponse.json();
+		// console.log("Location data:", locationData); // Log the location data here
 
 		const newNearestPostcode =
 			locationData.data.relationships.nearest_postcode.data.id;
