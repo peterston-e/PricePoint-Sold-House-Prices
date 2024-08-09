@@ -48,7 +48,7 @@ export const options = {
 					credentials?.email === user.email &&
 					credentials?.password === user.password
 				) {
-					return user;
+					return null;
 				} else {
 					return null;
 				}
