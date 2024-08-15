@@ -41,7 +41,7 @@ export const options = {
 				const user = {
 					id: 1,
 					password: "password",
-					email: "peterfaretra@yahoo.co.uk",
+					email: "email@example.com",
 				};
 
 				if (
