@@ -22,6 +22,3 @@ https://savory-birth-858.notion.site/NextAuth-js-6b83b15601c24bdca1051d37794d460
 
 Dave Gray: YouTube
 https://www.youtube.com/watch?v=w2h54xz6Ndw
-
-temp https://price-point-sold-house-prices-meog.vercel.app/api/auth/callback/google
-temp https://price-point-sold-house-prices-meog.vercel.app
