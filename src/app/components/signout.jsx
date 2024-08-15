@@ -11,7 +11,7 @@ export default function SignOut() {
 
 	return (
 		<div>
-			<button onClick={handleSignOut}>
+			<button onClick={handleSignOut} id="log-out" aria-label="log-out">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
