@@ -1,53 +1,58 @@
 import { NextResponse } from "next/server";
 import searchPostcode from "./mongodb";
-// import { headers } from "next/headers";
 import { RateLimiterMemory } from "rate-limiter-flexible";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]/options";
 
-const opts = {
-	points: 12, // Number of points to consume from user
+const rateLimiter = new RateLimiterMemory({
+	points: 12, // Number of requests allowed per client
 	duration: 60, // Per 60 seconds
-};
+});
 
-const rateLimiter = new RateLimiterMemory(opts);
+// postcodes.io returns at most 100 postcodes per radius lookup
+const MAX_POSTCODES = 100;
 
-export async function GET() {
+// There is no login, so rate limit by the caller's IP address.
+// Vercel sets x-forwarded-for; the first entry is the client.
+function getClientIp(request) {
+	const forwarded = request.headers.get("x-forwarded-for");
+	if (forwarded) return forwarded.split(",")[0].trim();
+	return request.headers.get("x-real-ip") ?? "unknown";
+}
+
+async function isRateLimited(request) {
 	try {
-		const session = await getServerSession(authOptions);
-
-		await rateLimiter.consume(session.user.email, 1);
-	} catch (rateLimiterRes) {
-		return NextResponse.json({
-			success: false,
-			data: [],
-			message: "Rate limit exceeded",
-		});
+		await rateLimiter.consume(getClientIp(request), 1);
+		return false;
+	} catch {
+		return true;
 	}
+}
+
+const rateLimitResponse = () =>
+	NextResponse.json(
+		{ success: false, data: [], message: "Rate limit exceeded" },
+		{ status: 429 }
+	);
+
+export async function GET(request) {
+	if (await isRateLimited(request)) return rateLimitResponse();
 	return NextResponse.json({ message: "hello from the api." });
 }
 
 export async function POST(request) {
+	if (await isRateLimited(request)) return rateLimitResponse();
+
 	try {
-		// sets the rate limit for the user
-		try {
-			const session = await getServerSession(authOptions);
-
-			await rateLimiter.consume(session.user.email, 1);
-		} catch (rateLimiterRes) {
-			return NextResponse.json({
-				success: false,
-				data: [],
-				message: "Rate limit exceeded",
-			});
-		}
-
 		const { postcodes } = await request.json();
 
+		if (!Array.isArray(postcodes) || postcodes.length > MAX_POSTCODES) {
+			return NextResponse.json(
+				{ success: false, data: [], message: "Invalid postcodes" },
+				{ status: 400 }
+			);
+		}
+
 		const result = await Promise.all(
-			postcodes.map(async (postcode) => {
-				return await searchPostcode(postcode);
-			})
+			postcodes.map((postcode) => searchPostcode(postcode))
 		);
 
 		return NextResponse.json(result);

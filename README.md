@@ -15,12 +15,10 @@ Ever been in an area and wondered what the houses sell for? I have. PricePoint g
 - `public/`: Static assets
 - `config/`: Configuration files
 
-## Auth Tutorial For Next-Auth
+## Environment Variables
 
-My Text version
-https://savory-birth-858.notion.site/NextAuth-js-6b83b15601c24bdca1051d37794d460c
+Set these in Vercel (Project → Settings → Environment Variables) or in `.env.local` for local development:
 
-Dave Gray: YouTube
-https://www.youtube.com/watch?v=w2h54xz6Ndw
+- `MONGODB_URI`: MongoDB connection string
 
-.
+There is no login. The search API is rate limited per IP address (12 requests per minute).
