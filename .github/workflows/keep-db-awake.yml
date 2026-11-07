@@ -1,0 +1,54 @@
+# Keeps the MongoDB database from being paused for inactivity by making
+# one real search request through the live app every week.
+#
+# Setup: in GitHub go to Settings → Secrets and variables → Actions →
+# Variables, and add APP_URL with your Vercel site address,
+# e.g. https://your-app.vercel.app (no trailing slash).
+
+name: Keep database awake
+
+on:
+  schedule:
+    - cron: "17 9 * * 1" # Mondays at 09:17 UTC
+  workflow_dispatch: # adds a "Run workflow" button for manual testing
+
+permissions:
+  actions: write # needed to re-enable this workflow (see last step)
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query the database through the app
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: |
+          if [ -z "$APP_URL" ]; then
+            echo "::error::APP_URL repository variable is not set"
+            exit 1
+          fi
+
+          # Retry to allow for a cold start of the serverless function.
+          response=$(curl --silent --show-error --fail \
+            --retry 3 --retry-delay 10 --max-time 60 \
+            -X POST "$APP_URL/api" \
+            -H "Content-Type: application/json" \
+            -d '{"postcodes":["SW1A 1AA"]}')
+
+          echo "Response: $response"
+
+          # The API returns one result per postcode; success means the
+          # database query ran (an empty result is still a success).
+          if ! echo "$response" | jq -e '.[0].success == true' > /dev/null; then
+            echo "::error::Database query did not succeed"
+            exit 1
+          fi
+
+      # GitHub disables scheduled workflows after 60 days without repo
+      # activity. Re-enabling it on every run resets that clock.
+      - name: Keep this schedule enabled
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow enable keep-db-awake.yml --repo "$GITHUB_REPOSITORY"
